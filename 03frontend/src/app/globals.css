@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* 纯白背景 */
+    --foreground: 222.2 84% 4.9%; /* 深灰色文字 */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 24 9.8% 10%; /* 深色主色调 */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background: #ffffff;
+    min-height: 100vh;
+    position: relative;
+  }
+}
+
+/* 丝滑无边框设计系统 */
+@layer components {
+  .list-item-smooth {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f8fafc;
+    transition: all 0.15s ease;
+    padding: 20px 0;
+  }
+
+  .list-item-smooth:hover {
+    background: #fafbfc;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .list-item-smooth:last-child {
+    border-bottom: none;
+  }
+
+  .header-clean {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid #f1f5f9;
+    backdrop-filter: blur(12px);
+  }
+
+  .column-clean {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .column-header-clean {
+    background: transparent;
+    border-bottom: 1px solid #f1f5f9;
+    border-radius: 0;
+    padding: 24px 0 16px 0;
+  }
+
+  .button-clean {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    font-weight: 500;
+    padding: 8px 16px;
+  }
+
+  .button-clean:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+  }
+
+  .button-clean.active {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+  }
+
+  .input-clean {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+  }
+
+  .input-clean:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+  }
+
+  .stats-clean {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .badge-clean {
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .badge-primary {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .badge-success {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .badge-warning {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .badge-danger {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  /* 品牌色彩 */
+  .text-brand {
+    color: #ff6154;
+  }
+
+  .bg-brand {
+    background-color: #ff6154;
+  }
+
+  .border-brand {
+    border-color: #ff6154;
+  }
+
+  .hover-brand:hover {
+    color: #ff6154;
+  }
+
+  /* 排名样式 */
+  .rank-number {
+    background: #f8fafc;
+    color: #64748b;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 4px 8px;
+    min-width: 32px;
+    text-align: center;
+    margin-right: 16px;
+  }
+
+  /* 分割线 */
+  .divider-clean {
+    background: #f1f5f9;
+    height: 1px;
+    margin: 0;
+  }
+
+  /* 交互指示器 */
+  .clickable-row {
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .clickable-row:hover {
+    background: #fafbfc;
+  }
+
+  .clickable-row:active {
+    background: #f1f5f9;
+  }
+
+  /* 无缝双列布局 */
+  .seamless-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    width: 100%;
+  }
+
+  @media (max-width: 1023px) {
+    .seamless-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 列标题区域 */
+  .column-title-area {
+    padding: 24px 32px 16px 32px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  /* 列内容区域 */
+  .column-content-area {
+    padding: 0 32px;
+    min-height: calc(100vh - 400px);
+  }
+
+  /* 左列样式 */
+  .left-column {
+    border-right: 1px solid #f8fafc;
+  }
+
+  @media (max-width: 1023px) {
+    .left-column {
+      border-right: none;
+      border-bottom: 1px solid #f8fafc;
+    }
+  }
+
+  /* 右列样式 */
+  .right-column {
+    /* 无特殊样式，保持统一 */
+  }
+}
+
+/* 现代化滚动条 */
+@layer utilities {
+  .scrollbar-clean {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f8fafc;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 3px;
+  }
+
+  .scrollbar-clean::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  
+  .scrollbar-clean::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* 文字渐变 */
+  .text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* 响应式网格 */
+  .grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .grid-responsive {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}

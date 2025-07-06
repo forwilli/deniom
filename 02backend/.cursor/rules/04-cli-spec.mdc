@@ -1,0 +1,75 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Deniom CLI (`run_analysis_cli.py`) 规范 (v3.0)
+
+当生成或修改后端的命令行工具时，**必须**遵循以下规则。
+
+## 1. 核心技术栈与风格
+
+- **框架**: CLI **必须** 使用 `Typer` 构建，以利用其强大的类型提示和自动帮助信息生成功能。
+- **美化**: **必须** 使用 `rich` 库（`Panel`, `Progress`, `Console`）来提供清晰、美观、信息丰富的终端输出。
+- **异步处理**: **必须** 使用 `asyncio` 来处理所有涉及 I/O 的操作（如 API 调用、数据库读写），确保 CLI 在执行长时间任务时不会阻塞。
+
+## 2. 设计原则
+
+- **功能分离**: 每个独立的 CLI 功能应作为一个独立的命令（`@app.command()`）。
+- **用户反馈**:
+    - **必须** 为长时间运行的任务（如 API 调用、数据处理）提供进度反馈，例如使用 `rich.progress.Progress`。
+    - **必须** 使用 `rich.panel.Panel` 来组织和高亮显示重要的输出信息。
+    - **必须** 使用 `rich.console.Console` 的 `print` 方法来代替标准 `print`，以支持颜色和样式。
+- **清晰输出**: 任务开始、成功、失败都 **必须** 有清晰的控制台输出，并使用颜色（如绿色表示成功，红色表示失败）来增强可读性。
+
+## 3. CLI 角色与职责
+
+- CLI 的主要角色是作为**内部管理和数据触发工具**，而非直接面向最终用户。
+- 它可以用于：
+    - 手动触发整个或部分分析管道。
+    - 测试单个服务的功能。
+    - 执行数据库迁移或数据清理任务。
+    - 生成统计报告。
+
+## 4. 依赖注入与服务使用
+
+- **延迟导入**: 在 CLI 命令函数**内部**导入服务（如 `opportunity_service`），以避免在应用启动时产生不必要的依赖或循环导入问题。
+- **数据库初始化**: 任何需要访问数据库的命令，**必须** 在执行业务逻辑前显式调用 `init_db()` 函数，以确保数据库表已创建。
+
+**示例：正确的 CLI 命令结构**
+```python
+import typer
+from rich.console import Console
+from app.core import init_db
+import asyncio
+
+app = typer.Typer()
+console = Console()
+
+@app.command()
+def my_command(param: str):
+    """
+    这是一个命令的描述。
+    """
+    # 在函数内部导入服务
+    from app.services.my_service import my_service 
+
+    console.print(f"开始执行任务，参数为: {param}")
+    
+    # 显式初始化数据库
+    init_db()
+
+    async def _run():
+        # ... 异步任务逻辑 ...
+        await my_service.do_something_async()
+
+    asyncio.run(_run())
+
+    console.print("[green]任务成功完成！[/green]")
+
+if __name__ == "__main__":
+    app()
+```
+
+
+

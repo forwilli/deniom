@@ -1,0 +1,5 @@
+GEMINI_API_KEY=AIzaSyDN9PAV2xRni0uI71vuvy9Kjkd9NoFqgzI
+
+# 网络代理配置 (用于访问 Google AI 服务)
+HTTP_PROXY=http://127.0.0.1:7890
+HTTPS_PROXY=http://127.0.0.1:7890

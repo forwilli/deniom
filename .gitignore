@@ -1,0 +1,17 @@
+# .gitignore
+
+# Environments
+.env
+.venv/
+/02backend/.env
+/02backend/.venv/
+/03frontend/node_modules/
+/03frontend/.next/
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/

@@ -42,3 +42,34 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python .github/scripts/run_diagnostics.py
+
+      - name: Post diagnosis result
+        if: always()
+        run: |
+          echo "AI diagnosis result - Status: ${{ steps.diagnostics.outputs.status }}"
+          echo "Reason: ${{ steps.diagnostics.outputs.reason }}"
+
+      - name: Auto-merge if approved
+        if: steps.diagnostics.outputs.status == 'approved'
+        run: |
+          echo "AI approved the changes. Proceeding with auto-merge..."
+          
+          # Configure git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Get the current branch name
+          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+          echo "Current branch: $BRANCH_NAME"
+          
+          # Fetch latest main
+          git fetch origin main
+          
+          # Create merge commit
+          git checkout main
+          git merge --no-ff $BRANCH_NAME -m "Auto-merge: $BRANCH_NAME approved by AI diagnostics"
+          
+          # Push to main
+          git push origin main
+          
+          echo "✅ Successfully merged $BRANCH_NAME to main"

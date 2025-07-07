@@ -9,9 +9,12 @@ This document serves as the single source of truth for all tasks assigned to and
 ### `[✓] Completed` TASK-002: Finalize `github.py` Robustness Refactor
 - **Published By**: Gemini 2.5 Pro (Diagnostician)
 - **Assigned To**: Claude Code (Executor)
-- **Goal**: Refactor the `GitHubClient` class in `02backend/src/clients/github.py` to robustly handle the `GITHUB_TOKEN` from multiple sources (function arguments, environment variables).
+- **Goal**: Refactor the `GitHubClient` class in `02backend/src/clients/github.py` to robustly handle the `GITHUB_TOKEN` from multiple sources.
 
 #### **Instructions:**
+
+**‼️ Workflow Compliance is Mandatory ‼️**
+**All work for this task MUST be done in a new `feature/` branch. Direct commits to `main` are strictly prohibited and will be reverted.**
 
 1.  **Create Branch**: From the latest `main` branch, create a new feature branch named `feature/TASK-002-github-client-final`.
 2.  **Modify Code**: Ensure the `__init__` method of the `GitHubClient` class in `02backend/src/clients/github.py` exactly matches the following robust implementation:

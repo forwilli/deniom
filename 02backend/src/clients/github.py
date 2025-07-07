@@ -1,6 +1,7 @@
 """
 GitHub API 客户端
 """
+import os
 import httpx
 from tenacity import retry, wait_exponential, stop_after_attempt, RetryError
 from datetime import datetime, timedelta
@@ -11,10 +12,12 @@ from ..core.config import settings
 
 class GitHubClient:
     def __init__(self, token: Optional[str] = None):
-        self.token = token
-        self.headers = {"Authorization": f"token {token}"} if token else {}
+        # Prioritize token: function argument > environment variable > none
+        auth_token = token or os.getenv('GITHUB_TOKEN')
+        self.token = auth_token
+        self.headers = {"Authorization": f"Bearer {auth_token}"} if auth_token else {}
         self.base_url = "https://api.github.com"
-        self.timeout = 30 # 增加超时
+        self.timeout = 30
 
     @retry(wait=wait_exponential(multiplier=1, min=2, max=30), stop=stop_after_attempt(5))
     async def _request(self, method: str, url: str, **kwargs):

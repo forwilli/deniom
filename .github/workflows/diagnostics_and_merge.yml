@@ -1,27 +1,50 @@
-        # .github/workflows/diagnostics_and_merge.yml
-        name: AI Diagnostics & Auto-Merge
-        on:
-          push:
-            branches:
-              - 'feature/**'
-        jobs:
-          audit:
-            runs-on: ubuntu-latest
-            steps:
-              - name: Checkout repository
-                uses: actions/checkout@v4
-                with:
-                  fetch-depth: 0
-              - name: Setup Python
-                uses: actions/setup-python@v5
-                with:
-                  python-version: '3.12'
-              - name: Install Dependencies
-                run: pip install google-generativeai python-dotenv
-              - name: Run AI Diagnostics
-                id: diagnostics
-                env:
-                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-                run: python .github/scripts/run_diagnostics.py
-              - name: Post diagnosis result
-                run: echo "AI diagnosis result - Status: ${{ steps.diagnostics.outputs.status }}, Reason: ${{ steps.diagnostics.outputs.reason }}"
+name: AI Diagnostics & Auto-Merge
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: '03frontend/package-lock.json'
+
+      - name: Install Frontend Dependencies
+        run: npm --prefix 03frontend install
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: '02backend/requirements.txt'
+
+      - name: Install Backend Dependencies
+        run: |
+          pip install -r 02backend/requirements.txt
+          pip install google-generativeai python-dotenv
+      
+      - name: Run AI Diagnostics
+        id: diagnostics
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python .github/scripts/run_diagnostics.py
+
+      - name: Post diagnosis result
+        if: always()
+        run: |
+          echo "AI diagnosis result - Status: ${{ steps.diagnostics.outputs.status }}"
+          echo "Reason: ${{ steps.diagnostics.outputs.reason }}"

@@ -3,6 +3,7 @@ import os
 import sys
 import subprocess
 import json
+import re
 from dotenv import load_dotenv
 import google.generativeai as genai
 

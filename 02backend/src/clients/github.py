@@ -6,13 +6,20 @@ from tenacity import retry, wait_exponential, stop_after_attempt, RetryError
 from datetime import datetime, timedelta
 import base64
 from typing import Optional
+import os
 
 from ..core.config import settings
 
 class GitHubClient:
     def __init__(self, token: Optional[str] = None):
-        self.token = token
-        self.headers = {"Authorization": f"token {token}"} if token else {}
+        # 优先级: 1. 函数参数 -> 2. 环境变量 -> 3. 无认证
+        if token:
+            self.token = token
+        else:
+            self.token = os.environ.get('GITHUB_TOKEN')
+        
+        # 使用 Bearer 认证模式（GitHub 推荐）
+        self.headers = {"Authorization": f"Bearer {self.token}"} if self.token else {}
         self.base_url = "https://api.github.com"
         self.timeout = 30 # 增加超时
 
